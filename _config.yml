@@ -19,12 +19,12 @@ timezone: America/Denver
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: Libberator's Lair               # the main title
+title: Libberator's Lab               # the main title
 
-tagline: C# Programmer, Unity Enjoyer  # it will display as the sub-title
+tagline: Problem Solver, Programmer, Person  # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
-  Technical blogs, tutorials, or anything that interests me.
+  Technical blogs, Unity tutorials, and other gamedev topics
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
 url: 'https://libberator.github.io'
@@ -198,3 +198,6 @@ jekyll-archives:
   permalinks:
     tag: /tags/:name/
     category: /categories/:name/
+
+plugins:
+  - jemoji
