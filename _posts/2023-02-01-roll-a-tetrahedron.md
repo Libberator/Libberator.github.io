@@ -13,8 +13,6 @@ img_path: /imgs/
 A member of a Discord server I moderate was curious about how to roll a tetrahedron. And that intrigued me. It's such a unique problem.
 They wanted something similar to <a href="https://www.youtube.com/watch?v=V9rVZ9mf0uA">Tarodev's "Roll-A-Cube" video</a>:
 
-{% include embed/{youtube}.html id='{V9rVZ9mf0uA}' %}
-
 Searching for a pre-existing solution to see if this had been done before turned up nothing.
 So I got to work.
 Engineering a solution to a unique problem involves trial and error,
