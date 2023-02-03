@@ -3,7 +3,7 @@ title: Naming Conventions
 date: 2023-01-06 12:00:00 -0700
 categories: [Blogging]
 tags: [programming,opinion,C#]     # TAG names should always be lowercase
-image: https://imgs.xkcd.com/comics/code_quality.png
+image: /imgs/code_quality.png
 ---
 
 > <center>"Any fool can write code that a computer can understand.<br>Good programmers write code that humans can understand."<br>— Martin Fowler</center>
@@ -61,7 +61,7 @@ public class ClassName : ISomeInterface // interfaces start with an "I"
     // Fields
     private int _privateField; // private fields camelCase with leading underscore
     protected bool _protectedField; // protected fields camelCase with leading underscore
-    public string PublicField; // public is PascalCase. When possible, use properties instead of public fields
+    public string PublicField; // public is PascalCase. Prefer properties over public fields
 
     public const float PI = 3.14159f; // const is always SCREAMING_CAPS
     private const string MY_GREETING = "Hello"; // use $"{string} {interpolation}" when possible
@@ -101,11 +101,11 @@ To be clear, this does **not** mean to ever use <a href="https://en.wikipedia.or
 Similar to how I'm explicit with `private`, I also prefer to be explicit with how I write numbers. While `float num = 42;` is the same as `float num = 42f;` due to implicit conversion, `var num = 42;` is **not** the same as `var num = 42f;` —
 one is an `int`, the other is a `float`. Therefore, it's a good habit to always write the `f` after your number when you're working with floats.
 The main mistake I see new programmers make is when they use UnityEngine's `Random.Range(lowerBound, upperBound);`. The `int` version of that method has the upper bound as *exclusive*,
-whereas the `float` version's upper bound is *inclusive*. Common source of off-by-1 errors.
+whereas the `float` version's upper bound is *inclusive*. Not knowing what "exclusive" means is a common source of off-by-1 errors.
 
 Programming becomes simpler when you can just focus on the logic implementation and not be distracted by the types making it slower to write and harder to read.
-Now don't get me wrong, I love statically-typed languages. Knowing what type a variable is ***is*** important,
-but writing your code in a way that reads closer to plain English or pseudocode is much easier to follow along.
+Now don't get me wrong, I love statically-typed languages; knowing what type a variable is ***is*** important.
+But writing your code in a way that reads closer to plain English or pseudocode is much easier to follow along.
 I don't think there's much to *gain* by purposefully avoiding `var`. It's a feature of the language for a reason.
 
 ### Bracket Indentation

@@ -8,10 +8,10 @@ tags: [unity,programming,C#]     # TAG names should always be lowercase
 img_path: /imgs/
 ---
 
-> <center>A detailed guide appears in front of you. Roll 1d4 for perception.</center>
+> <center>A guide appears in front of you. Roll 1d4 for perception.</center>
 
 A member of a Discord server I moderate was curious about how to roll a tetrahedron. And that intrigued me. It's such a unique problem.
-They wanted something similar to <a href="https://www.youtube.com/watch?v=V9rVZ9mf0uA">Tarodev's "Roll-A-Cube" video</a>:
+They wanted something similar to <a href="https://www.youtube.com/watch?v=V9rVZ9mf0uA">Tarodev's "Roll-A-Cube" video</a>.
 
 Searching for a pre-existing solution to see if this had been done before turned up nothing.
 So I got to work.
@@ -224,7 +224,7 @@ It looks promising! However... there's one small detail that I don't like.
 
 ![DOTween Results](2023-02-01-dotween.gif)
 
-It doesn't stay anchored.
+<center>It doesn't stay anchored.</center>
 
 What's the problem?<br>
 We need the path of the jump to be circular, since it just goes along a 109.47..° arc of a circle.
@@ -241,10 +241,12 @@ Time to write our own coroutine.
 The rotation in the coroutine also requires that we first cache the start so that we can properly Slerp between the start and target.
 
 ```csharp
+/* Coroutine setup */
 var deltaRot = Quaternion.FromToRotation(hit.normal, Vector3.down);
 var startRot = _center.rotation;
 var targetRot = deltaRot * startRot;
-// ... //
+
+/* Applied every frame in the coroutine */
 _center.rotation = Quaternion.Slerp(startRot, targetRot, t);
 ```
 
@@ -253,19 +255,21 @@ With that in mind, we need to mainly work with **offsets**, which we then add on
 
 ![Slerp Diagram](2023-02-01-slerpDiagram.png)
 
-To achieve moving along the yellow curved path, this is what the movement code will look like:
+In this diagram, the Slerp operation would move a vector along a circular path, depicted by the gray arrow.
+To achieve moving along the yellow curved path, this is the relevant parts of the movement code:
 
 ```csharp
+/* Declared at the top */
 private const float ROOT_THREE_OVER_SIX = 0.288675135f; // half the previously-declared const
-```
 
-```csharp
+/* Coroutine setup */
 var moveDir = new Vector3(hit.normal.x, 0f, hit.normal.z).normalized;
 var halfStep = ROOT_THREE_OVER_SIX * moveDir;
 var startOffset = _center.localPosition - halfStep; // notice localPosition usage for offset
 var targetOffset = _center.localPosition + halfStep;
 var anchor = transform.position - startOffset;
-// ... //
+
+/* Applied every frame in the coroutine */
 transform.position = anchor + Vector3.Slerp(startOffset, targetOffset, t);
 ```
 
@@ -274,4 +278,4 @@ You can grab the <a href="https://gist.github.com/Libberator/26c9176e4e51d7a5248
 
 ![Slerp Coroutine Results](2023-02-01-slerp.gif)
 
-Happy rolling!
+<center>Happy rolling!</center>
