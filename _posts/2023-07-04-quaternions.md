@@ -30,9 +30,9 @@ You probably know already that a quaternion represents a "rotation". Great! Howe
 
 <details><summary><b>Example Terminology Usage</b></summary>
 Consider an object initially facing East. "Facing East" represents its current orientation. To make the object face East again after a change in orientation, we need to apply a rotation. On the other hand, if we simply say "turn 90° about the Y axis", we directly specify the rotation without explicitly mentioning the resulting orientation. English is hard; hopefully this helps.
-</details>
+</details><br>
 
-When you see or hear "multiplying" (in the context of quaternions), it's easier to think of "applying" instead (not in the sene of "setting" but rather "modifying by"). A quaternion times a vector means you're *applying* the rotation *to* the vector. If you ever heard someone say *"multiplying quaternions together is like adding them"*, **unlearn that**. We don't "add" quaternions in the traditional sense. Instead, one rotation gets *applied* to the other. It's better in the long-run to think about them properly rather than lazily.
+When you see or hear "multiplying" (in the context of quaternions), it's easier to think of "applying" instead (not in the sense of "setting" but rather "modifying by"). A quaternion times a vector means you're *applying* the rotation *to* the vector. If you've ever heard someone say *"multiplying quaternions together is like adding them"*, **unlearn that**. We don't "add" quaternions in the traditional sense. Instead, one rotation gets *applied* to the other. It's better in the long-run to think about them properly rather than lazily.
 
 Also worth mentioning...
 - I will be using Unity's coordinate system (X = right, Y = up, Z = forward), which is a Left-Handed coordinate system (i.e. satisfies Left-Hand Rule). If you don't know what that means, look it up. In short: positive angles are CCW rotations when looking in the same direction of the axis you're rotating about.
@@ -116,7 +116,7 @@ Having to add extra code to handle the transition between 0° and 360° (or -180
 
 ### Unit Quaternions (Normalized)
 
-Unit quaternions have a ||magnitude|| of 1. This means if you square all four components and add those together, it will equal 1. Within Unity, quaternions get normalized by default. There does exist a <code>Normalize</code> method in case you're manually entering quaternion values and it, for some reason, doesn't auto-normalize (it can happen). But usually you shouldn't have to worry about that. Non-Unit Quaternions are more complicated things that I'm just not going to get into.
+Unit quaternions have a \|\|magnitude\|\| of 1. This means if you square all four components and add those together, it will equal 1. Within Unity, quaternions get normalized by default. There does exist a <code>Normalize</code> method in case you're manually entering quaternion values and it, for some reason, doesn't auto-normalize (it can happen). But usually you shouldn't have to worry about that. Non-Unit Quaternions are more complicated things that I'm just not going to get into.
 
 ### Identity ("1")
 
@@ -152,7 +152,7 @@ When multiplying quaternions together, the best way to think about it is from **
 
 ![Quaternion Spin](2023-07-04-quaternion-spin.gif)
 
-By "complete", I refer to an orientation returning to its starting state. If you track one face of the cube in the gif, you'll see how this works where there are two different "states" when the face is oriented the same way.
+By "complete", I'm referring to an orientation returning to its starting state. If you track one face of the cube in the gif, you'll see how this works where there are two different "states" when the face is oriented the same way.
 
 This is how it works in real life, too: Electrons and other matter particles in quantum mechanics have this "spin" property, where it can be in a "spin up" or "spin down" state.
 
@@ -184,12 +184,12 @@ When interpolating between a start and end orientation, Quaternions take the sho
 #### Time- or Percent-Based Methods
 - <a href="https://docs.unity3d.com/ScriptReference/Quaternion.Lerp.html">Lerp</a>: Linear interpolation between [0-1]
 - <a href="https://docs.unity3d.com/ScriptReference/Quaternion.Slerp.html">Slerp</a>: Spherical interpolation between [0-1]
-- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.LerpUnclamped.html">LerpUnclamped</a> + <a href="https://docs.unity3d.com/ScriptReference/Quaternion.SlerpUnclamped.html">SlerpUnclamped</a>: can also extrapolate beyond 0 and 1
+- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.LerpUnclamped.html">LerpUnclamped</a> & <a href="https://docs.unity3d.com/ScriptReference/Quaternion.SlerpUnclamped.html">SlerpUnclamped</a>: can also extrapolate beyond 0 and 1
 
 <details><summary>What's the difference between Lerp and Slerp? Aren't they both spherical since it involves things that rotate?</summary>
-Yeah, not much difference tbh. Unlike the differences between Vector3's Lerp and Slerp, these all follow the same path but just have an ever-so-slightly different easing/timing along the path. The docs say that "[Lerp] is faster than Slerp but looks worse if the rotations are far apart." But it's hard to see a difference</details>
+Yeah, not much difference tbh. Unlike the differences between Vector3's Lerp and Slerp, these all follow the same path but just have an ever-so-slightly different easing/timing along the path. The docs say that "[Lerp] is faster than Slerp but looks worse if the rotations are far apart." But it's hard to see a difference</details><br>
 
-<details><summary>Do the Unclamped versions behave the same?</summary>
+<details><summary>Do LerpUnclamped and SlerpUnclamped behave the same?</summary>
 <b>No</b>. Because of how the math works with extrapolating and quaternions getting auto-normalized, LerpUnclamped "fizzles out" at certain values outside the 0-1 range, like diminishing returns. Unsatisfying.<br>In my tests, if the angle between the start and end orientations are less than ~36° apart, then SlerpUnclamped <i>also</i> behaves like LerpUnclamped. However, at larger starting angles, SlerpUnclamped shines and will properly extrapolate.<br>For example, if you wanted to extrapolate the Minute Hand on a Clock, your start and end orientations should be at least 6 minutes apart, but less than 30 minutes so that <i>forward</i> in time doesn't go the wrong way
 </details>
 
@@ -208,11 +208,11 @@ Quaternions by theirself are just a math construct - they have no idea what a Tr
     - Uses an Axis and Angle and a world position <code>Vector3 point</code> as a pivot or anchor that the axis passes through
 - <a href="https://docs.unity3d.com/ScriptReference/Transform.LookAt.html">Transform.LookAt</a>: Immediately snap a transform's forward to a <code>Transform target</code> or <code>Vector3 worldPosition</code>
     - Similar to <code>Quaternion.LookRotation</code>, this also can take a <code>Vector3 worldUp</code> hint
-    - For 2D games, since this defaults to using the transform's forward, you'll want to adjust the <code>worldUp</code> to have it orient towards a certain direction, leaving forward as <code>Vector3.forward</code>
+    - For 2D games, since this defaults to using the transform's forward, you'll either want to adjust the <code>worldUp</code> to have it orient towards a target (leaving the <code>target</code> vector directly forward of your character) OR change how your sprite is parented/oriented
 - Setting a <code>Vector3 direction</code> directly to <code>transform.<a href="https://docs.unity3d.com/ScriptReference/Transform-forward.html">forward</a>/<a href="https://docs.unity3d.com/ScriptReference/Transform-up.html">up</a>/<a href="https://docs.unity3d.com/ScriptReference/Transform-right.html">right</a></code>
     - This approach doesn't give control over where the other axes choose to align, so use cautiously or only in very simple cases
 - Setting a <code>Quaternion rotation</code> directly to <a href="https://docs.unity3d.com/ScriptReference/Transform-rotation.html"><code>transform.rotation</code></a> or <a href="https://docs.unity3d.com/ScriptReference/Transform-localRotation.html"><code>transform.localRotation</code></a>
-    - Tip: If you have <code>someRotation</code> you want to apply to your transform's orientation, **don't do** <code>transform.rotation *= someRotation;</code>! Instead, do <code>transform.rotation = someRotation * transform.rotation;</code>. Order matters
+    - Tip: If you have <code>someRotation</code> you want to *apply* to your transform's orientation, **don't do** <code>transform.rotation *= someRotation;</code>! Instead, do <code>transform.rotation = someRotation * transform.rotation;</code>. Order matters
 
 ### Quaternion Methods You'll Never or Rarely Use
 
@@ -230,7 +230,7 @@ Quaternions consist of four numbers: <code>x</code>, <code>y</code>, <code>z</co
 - What do those numbers mean?
 - How does multiplying with them work?
 
-\**Note: I'll be placing <code>w</code> at the end to be in line with Unity; other sources may put the <code>w</code> at the beginning.*
+\**Note: I'll be placing <code>w</code> at the end to match with Unity; other sources may put the <code>w</code> at the beginning.*
 
 ### Geometric Interpretation
 
@@ -244,14 +244,14 @@ Instead, it's easier to imagine a quaternion in two parts: a Vector3 (using <cod
 
 The magical rotational properties stem from the usage of imaginary numbers: $i = \sqrt{-1}$
 
-Brief refresher on the Complex Plane, $\mathbb{C}$: it's a 2D grid, where the horizontal axis consists of real numbers, $\mathbb{R}$, and the vertical axis consists of imaginary numbers, $\mathbb(I)$. Any time you multiply a complex number (i.e. a point in the grid) by <code>i</code>, it's like rotating that point 90° counter-clockwise about the origin. If you do that 4 times, you're back to where you started: <code>1</code> -> <code>i</code> -> <code>-1</code> -> <code>-i</code> -> <code>1</code>
+Brief refresher on the Complex Plane, $\mathbb{C}$: it's a 2D grid, where the horizontal axis consists of real numbers, $\mathbb{R}$, and the vertical axis consists of imaginary numbers, $\mathbb{I}$. Any time you multiply a complex number (i.e. a point in the grid) by <code>i</code>, it's like rotating that point 90° counter-clockwise about the origin. If you do that 4 times, you're back to where you started: <code>1</code> -> <code>i</code> -> <code>-1</code> -> <code>-i</code> -> <code>1</code>
 
 Let's extend the Complex Plane by adding two more imaginary dimensions: <code>j</code> and <code>k</code>. Both <code>j</code> and <code>k</code> also have the rotational superpowers that come from $\sqrt{-1}$. All four axes (<code>1</code>, <code>i</code>, <code>j</code>, and <code>k</code>) are orthogonal to one another, forming a "basis" in our 4D space
 
 To make sense of how multiplication with these new axes works, we need to add a few special rules. And remember: the order of multiplication **matters**. The value on the left is being *applied* to the one on the right:
-- <code>i * j = k</code>, <code>j * i = -k</code>
-- <code>j * k = i</code>, <code>k * j = -i</code>
-- <code>k * i = j</code>, <code>i * k = -j</code><br>
+- <code>i * j = k</code>,&ensp; <code>j * i = -k</code>
+- <code>j * k = i</code>,&ensp; <code>k * j = -i</code>
+- <code>k * i = j</code>,&ensp; <code>i * k = -j</code><br>
 <a href="https://upload.wikimedia.org/wikipedia/commons/0/04/Cayley_Q8_quaternion_multiplication_graph.svg">Click here for an interactive visualization of these rules</a>
 
 Now we can make sense of what Sir Hamilton etched into stone (see quote at top of this article):
@@ -263,7 +263,7 @@ With this info, we can represent a quaternion in the form:
 
 $$ x\mathbb{i} + y\mathbb{j} + z\mathbb{k} + w $$
 
-It's worth pointing out that the *real axis* where <code>w</code> lives has a unit value of <code>1</code>. It's just omitted in the formula for convenience: $ ... + w*1 $. This will be useful info later when we're [multiplying quaternions](#qq-multiplication).
+It's worth pointing out that the *real axis* where <code>w</code> occupies has a unit value of <code>1</code>. It's just omitted in the formula for convenience: $ ... + w*1 $. This will be useful info later when we're [multiplying quaternions](#qq-multiplication).
 
 ### The Real Part: w
 
@@ -326,22 +326,24 @@ Since we know the form of a quaternion, and we're only plugging in the values fo
 | `k` |  j  | -i  | -1  |  k  |
 | `1` |  i  |  j  |  k  |  1  |
 
-For <code>Q<sub>A</sub> \* Q<sub>B</sub></code>, <code>Q<sub>A</sub></code> would be along the left column, and <code>Q<sub>B</sub></code> would be along the top row. If you swap them, you'll just have some minus signs in the wrong spots.
+For <code>Q<sub>A</sub> * Q<sub>B</sub></code>, <code>Q<sub>A</sub></code> would be along the left column, and <code>Q<sub>B</sub></code> would be along the top row. If you swap them, you'll just have some minus signs in the wrong spots.
 
-// TODO: Add math example here demonstrating start to finish
+<details><summary>See an example</summary>
+- Not implemented yet -
+</details>
 
 ### Q*V Multiplication
 
-I know I wrote <code>Q \* V</code>, but *actually* we have to do <code>Q \* V \* Q<sup>-1</sup></code>, *sandwiching* the vector between the quaterion and its inverse\*. Yummy. This is to ensure the <code>w</code> value gets properly canceled out so that we're left with a Vector in the end and not actually a quaternion.
+I know I wrote <code>Q * V</code>, but *actually* we have to do <code>Q * V * Q<sup>-1</sup></code>, *sandwiching* the vector between the quaterion and its inverse\*. Yummy. This is to ensure the <code>w</code> value gets properly canceled out so that we're left with a Vector in the end and not actually a quaternion.
 
-\*<i>Note: In Unity, you can't perform <code>V \* Q</code>. This math section is how to solve it **on paper**, and it's more-or-less what happens behind the scenes when you do a <code>Q \* V</code> operation in Unity.</i>
+\*<i>Note: In Unity, you can't perform <code>V * Q</code>. This math section is how to solve it **on paper**, and it's more-or-less what happens behind the scenes when you do a <code>Q * V</code> operation in Unity.</i>
 
 Not the best analogy, but here's one way to think about it the sandwiching: Imagine wringing out a wet towel. Both hands start facing the same direction as each other, palms down gripping the towel. One hand twists the towel in one direction 180° (<code>Q</code>). The other hand twists it 180° in the opposite direction (<code>Q<sup>-1</sup></code>). Both hands end up still facing the same way as each other, but the towel (<code>V</code>) ends up twisted (rotated) and slightly less soaked.
 
 So how do we multiply something that lives in 3D space by something that's 4D? They live in very different spaces - real world vs complex imaginary land. <b>Here's the trick</b>:
 
 1. We *pretend* our vector is actually 4D like a quaternion, setting the <code>w</code> value to 0. We don't do any normalzing to it. We'll call it <code>V<sub>4D</sub></code>
-2. We do the same quaternion multiplication as before but just **twice**. It doesn't matter which pair you multiply first:  <code>(Q \* V<sub>4D</sub>) \* Q<sup>-1</sup></code> = <code>Q \* (V<sub>4D</sub> \* Q<sup>-1</sup>)</code>
+2. We do the same quaternion multiplication as before but just **twice**. It doesn't matter which pair you multiply first:  <code>(Q * V<sub>4D</sub>) * Q<sup>-1</sup></code> = <code>Q * (V<sub>4D</sub> * Q<sup>-1</sup>)</code>
 3. After all the multiplication math dust settles, if we did it right, its <code>w</code> will end up as 0 and so we drop that real axis. We also drop the imaginary labels <code>i</code>, <code>j</code>, and <code>k</code> from it to convert it back to a regular Vector, now rotated
 
 And that's it. Easy, right?
@@ -350,18 +352,18 @@ And that's it. Easy, right?
 
 <details><summary>I want to interpolate between a start and end orientation, but with the <b>long</b> path. How can I achieve this?</summary>
 As with anything program-related, there are lots of potential solutions. Here is one approach using <code>SlerpUnclamped</code>:
-<pre>public Quaternion SlerpLongPath(Quaternion from, Quaternion to, float t)
+<pre><code>public Quaternion SlerpLongPath(Quaternion from, Quaternion to, float t)
 {
     var angle = Quaternion.Angle(from, to); // angle along short path
     if (angle == 0) return from; // avoid divide-by-zero
     float adjustedT = t * (angle - 360f) / angle; // remaps t from [0,1] to [0,-N]
     return Quaternion.SlerpUnclamped(from, to, adjustedT);
 }
-</pre>
+</code></pre>
 <details><summary>Pop quiz: In what situation will the above code not give desired results?</summary>
-Answer: When the Angle between <code>from</code> and <code>to</code> is less than ~36°. See <a href="#quaternion-interpolation">Quaternion Interpolation</a> for details</details>
+Answer: When the Angle between <code>from</code> and <code>to</code> is less than ~36°. See <a href="#quaternion-interpolation">Quaternion Interpolation</a> for details</details><br>
 If that's going to be a problem, here is a different approach that uses a mid-point that we flip around:
-<pre>public Quaternion SlerpLongPath(Quaternion from, Quaternion to, float t)
+<pre><code>public Quaternion SlerpLongPath(Quaternion from, Quaternion to, float t)
 {
     var midRot = Quaternion.Slerp(from, to, 0.5f); // orientation along short path
     midRot.ToAngleAxis(out var midAngle, out var midAxis); // niche use for this method
@@ -369,11 +371,11 @@ If that's going to be a problem, here is a different approach that uses a mid-po
     if (t < 0.5f) return Quaternion.Slerp(from, midRotLong, 2 * t);
     return Quaternion.Slerp(midRotLong, to, 2 * t - 1);
 }
-</pre>
+</code></pre>
 With this approach, if <code>from</code> and <code>to</code> are identical or exactly 180° apart, the long path is not strongly defined so results may vary
 </details>
 
-// TODO: Add more questions & answers, tips 'n tricks
+What are some FAQs you'd like me to this list? Ask 
 
 - <a href="https://docs.unity3d.com/Manual/QuaternionAndEulerRotationsInUnity.html"><i>Rotation and orientation in Unity</i></a> - Unity Docs. Short 'n sweet
 - <a href="https://en.wikipedia.org/wiki/Quaternion"><i>Quaternion</i></a> - Wikipedia
