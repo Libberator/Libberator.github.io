@@ -32,7 +32,7 @@ You probably know already that a quaternion represents a "rotation". Great! Howe
 Consider an object initially facing East. "Facing East" represents its current orientation. To make the object face East again after a change in orientation, we need to apply a rotation. On the other hand, if we simply say "turn 90° about the Y axis", we directly specify the rotation without explicitly mentioning the resulting orientation. English is hard; hopefully this helps.
 </details><br>
 
-When you see or hear "multiplying" (in the context of quaternions), it's easier to think of "applying" instead (not in the sense of "setting" but rather "modifying by"). A quaternion times a vector means you're *applying* the rotation *to* the vector. If you've ever heard someone say *"multiplying quaternions together is like adding them"*, **unlearn that**. We don't "add" quaternions in the traditional sense. Instead, one rotation gets *applied* to the other. It's better in the long-run to think about them properly rather than lazily.
+When you see or hear "multiplying" (in the context of quaternions), it's easier to instead think of "applying" - not in the sense of "setting" but rather "modifying by". Multiplying a quaternion with a vector means you're **applying** the rotation *to* the vector. If you've ever heard someone say *"multiplying quaternions together is like adding them"*, **unlearn that**. We don't "add" quaternions in the traditional sense. Instead, one rotation gets *applied* to the other. It's better in the long-run to think about them properly rather than lazily.
 
 Also worth mentioning...
 - I will be using Unity's coordinate system (X = right, Y = up, Z = forward), which is a Left-Handed coordinate system (i.e. satisfies Left-Hand Rule). If you don't know what that means, look it up. In short: positive angles are CCW rotations when looking in the same direction of the axis you're rotating about.
@@ -116,37 +116,43 @@ Having to add extra code to handle the transition between 0° and 360° (or -180
 
 ### Unit Quaternions (Normalized)
 
-Unit quaternions have a \|\|magnitude\|\| of 1. This means if you square all four components and add those together, it will equal 1. Within Unity, quaternions get normalized by default. There does exist a <code>Normalize</code> method in case you're manually entering quaternion values and it, for some reason, doesn't auto-normalize (it can happen). But usually you shouldn't have to worry about that. Non-Unit Quaternions are more complicated things that I'm just not going to get into.
+Unit quaternions have a \|\|magnitude\|\| of 1. This means if you square all four components and add them together, it should equal 1. Techincally should square-root it too, but $\sqrt{1} = 1$, so I'm cutting corners. Within Unity, quaternions get normalized by default. There does exist a <code>Normalize</code> method in case you're manually entering quaternion values and it, for some reason, doesn't auto-normalize (it can happen). But usually you shouldn't have to worry about that. Non-Unit Quaternions are more complicated things that I'm just not going to get into.
 
 ### Identity ("1")
 
 Identity just means "no change". It's like multiplying regular numbers by <code>1</code>, or adding <code>0</code>. When you set an object's orientation to <code>Quaternion.identity</code>, it goes to the default orientation, which represents an absence of any rotations applied (i.e. 0° on all Euler Angles).
 
+<code>Q<sub>I</sub> = new Quaternion(0, 0, 0, 1);</code>
+
 ### Invertability (Ctrl + Z)
 
-The inverse of a quaternion <code>Q</code> is denoted as <code>Q<sup>-1</sup></code>. Any rotation that is applied can be undone. A quaternion will cancel out with its inverse. Thinking in terms of *Axis and Angles*, you can view it as "the opposite rotational angle with same axis direction" or "the same rotational angle with an opposite axis direction". Same end result. Mathematically speaking:
+The Inverse of a quaternion <code>Q</code> is denoted as <code>Q<sup>-1</sup></code>. Any rotation that is applied can be undone. A quaternion will cancel out with its Inverse, resulting in the Identity quaternion. Thinking in terms of *Axis and Angles*, you can view it as negating the axis to point in the opposite direction, while keeping the same rotational angle. Another way to think about it is just negating the angle to rotate in the opposite direction. Mathematically speaking:
 
-<code>Q * Q<sup>-1</sup></code> = <code>Q<sup>-1</sup> * Q</code> = 1 (Identity)
+<code>Q<sup>-1</sup> = new Quaternion(-Q.x, -Q.y, -Q.z, Q.w);</code>
+
+<code>Q * Q<sup>-1</sup> = Q<sup>-1</sup> * Q = Q<sub>I</sub></code> (Identity)
+
+Note: There also exists a quaternion Conjugate, <code>Q<sup>*</sup></code>, where the only difference is that Conjugate keeps the original magnitude and the Inverse is just the Conjugate divided by the square-magnitude. But since we're working with Unit quaternions, the Inverse and Conjugate will be the same for our purposes, so I purposefully omitted any division operation for the Inverse.
 
 ### Associativity (Parentheses order doesn't matter)
 
 Given quaternions <code>Q<sub>1</sub></code>, <code>Q<sub>2</sub></code>, and <code>Q<sub>3</sub></code>, associativity states that:
 
-<code>(Q<sub>1</sub> * Q<sub>2</sub>) * Q<sub>3</sub></code> is the same as <code>Q<sub>1</sub> * (Q<sub>2</sub> * Q<sub>3</sub>)</code>
+<code>(Q<sub>1</sub> * Q<sub>2</sub>) * Q<sub>3</sub> = Q<sub>1</sub> * (Q<sub>2</sub> * Q<sub>3</sub>)</code>
 
 Same applies when multiplying with a vector <code>V</code>:
 
-<code>(Q<sub>1</sub> * Q<sub>2</sub>) * V</code> is the same as <code>Q<sub>1</sub> * (Q<sub>2</sub> * V)</code>
+<code>(Q<sub>1</sub> * Q<sub>2</sub>) * V = Q<sub>1</sub> * (Q<sub>2</sub> * V)</code>
 
 ### Non-Commutativity (Multiplcation order matters)
 
 Given quaternions <code>Q<sub>1</sub></code> and <code>Q<sub>2</sub></code>, non-commutativity states that:
 
-<code>Q<sub>1</sub> * Q<sub>2</sub></code> is **not** always the same as <code>Q<sub>2</sub> * Q<sub>1</sub></code>
+<code>Q<sub>1</sub> * Q<sub>2</sub></code> is **not always** the same as <code>Q<sub>2</sub> * Q<sub>1</sub></code>
 
-There are *some cases* where they will just happen to be equal. Like if at least one of them is the Identity quaternion, if one is the Inverse of the other, or some other exceptional case involving symmetry.
+There are *some cases* where they will just happen to be equal. Like if at least one of them is the Identity quaternion, if one is the Inverse of the other, or some other exceptions involving symmetry.
 
-When multiplying quaternions together, the best way to think about it is from **right-to-left** (I know, it seems backwards). Given <code>Q<sub>1</sub> * Q<sub>2</sub> * V</code>: start with the Vector direction, rotate it *first* by <code>Q<sub>2</sub></code>, *then* rotate that resulting vector by <code>Q<sub>1</sub></code>. Order of operations is important to visualize the rotations.
+When multiplying quaternions together, the best way to think about it is from **right-to-left** (I know, it seems backwards). Given <code>Q<sub>1</sub> * Q<sub>2</sub> * V</code>: start with the Vector direction, imagine rotating it *first* by <code>Q<sub>2</sub></code>, *then* rotate that resulting vector by <code>Q<sub>1</sub></code>. Order of operations is important to visualize the rotations. Alternatively, if you prefer left-ro-right, you could try to visualize the result of <code>Q<sub>1</sub> * Q<sub>2</sub></code> first, but I find that's generally harder.
 
 ### A "Complete" Rotation is 720°, Not Just 360°
 
@@ -175,11 +181,10 @@ This is how it works in real life, too: Electrons and other matter particles in 
     - This method was vital for my Roll-a-Tetrahedron solution
 - <a href="https://docs.unity3d.com/ScriptReference/Quaternion.Inverse.html">Inverse</a>: Gets the ~~evil twin~~ opposite rotation of a quaternion.
     - Example: if you wanted to get <code>Q<sub>ToFrom</sub></code>, you *could* call FromToRotation again swapping parameters or you could just do <code>Q<sub>ToFrom</sub> = Quaternion.Inverse(Q<sub>FromTo</sub>);</code>
-    - Very simple method. Given some <code>Q</code>, <code>Q<sup>-1</sup></code> is just <code>new Quaternion(Q.x, Q.y, Q.z, -Q.w);</code>
 
 ### Quaternion Interpolation
 
-When interpolating between a start and end orientation, Quaternions take the shortest path (this means that angles more than 180° apart aren't a thing). Try to avoid having your start and end 180° apart (pointing in opposite directions), otherwise the path between them will not be predictable.
+When interpolating between a start and end orientation, Quaternions take the shortest path (this means that angles more than 180° apart aren't a thing). Try to avoid having your start and end 180° apart (pointing in opposite directions), otherwise the path between them will not be well-defined.
 
 #### Time- or Percent-Based Methods
 - <a href="https://docs.unity3d.com/ScriptReference/Quaternion.Lerp.html">Lerp</a>: Linear interpolation between [0-1]
@@ -244,9 +249,13 @@ Instead, it's easier to imagine a quaternion in two parts: a Vector3 (using <cod
 
 The magical rotational properties stem from the usage of imaginary numbers: $i = \sqrt{-1}$
 
-Brief refresher on the Complex Plane, $\mathbb{C}$: it's a 2D grid, where the horizontal axis consists of real numbers, $\mathbb{R}$, and the vertical axis consists of imaginary numbers, $\mathbb{I}$. Any time you multiply a complex number (i.e. a point in the grid) by <code>i</code>, it's like rotating that point 90° counter-clockwise about the origin. If you do that 4 times, you're back to where you started: <code>1</code> -> <code>i</code> -> <code>-1</code> -> <code>-i</code> -> <code>1</code>
+Brief refresher on the Complex Plane, $\mathbb{C}$: it's a 2D grid, where the horizontal axis consists of real numbers, $\mathbb{R}$, and the vertical axis consists of imaginary numbers, $\mathbb{I}$. A point in the grid is called a complex number, written as <code>a + bi</code>. Any time you multiply a complex number by <code>i</code>, it's like rotating that point 90° counter-clockwise about the origin. If you do that 4 times, you're back to where you started: <code>1</code> -> <code>i</code> -> <code>-1</code> -> <code>-i</code> -> <code>1</code>
 
-Let's extend the Complex Plane by adding two more imaginary dimensions: <code>j</code> and <code>k</code>. Both <code>j</code> and <code>k</code> also have the rotational superpowers that come from $\sqrt{-1}$. All four axes (<code>1</code>, <code>i</code>, <code>j</code>, and <code>k</code>) are orthogonal to one another, forming a "basis" in our 4D space
+Let's extend the Complex Plane by adding two more imaginary dimensions: <code>j</code> and <code>k</code>. Both <code>j</code> and <code>k</code> also have the rotational superpowers that come from $\sqrt{-1}$. All four axes (<code>1</code>, <code>i</code>, <code>j</code>, and <code>k</code>) are orthogonal to one another, forming a "basis" in our 4D space. We can represent a quaternion in the form:
+
+$$ x\mathbb{i} + y\mathbb{j} + z\mathbb{k} + w $$
+
+It's worth pointing out that the *real axis* where <code>w</code> occupies has a unit value of <code>1</code>. It's just omitted in the formula for convenience: $... + w*1$. This will be useful info later when we're [multiplying quaternions](#qq-multiplication).
 
 To make sense of how multiplication with these new axes works, we need to add a few special rules. And remember: the order of multiplication **matters**. The value on the left is being *applied* to the one on the right:
 - <code>i * j = k</code>,&ensp; <code>j * i = -k</code>
@@ -259,12 +268,6 @@ Now we can make sense of what Sir Hamilton etched into stone (see quote at top o
 
 For that <code>ijk</code> part, whether you do the multiplication like <code>(i * j) * k</code> or <code>i * (j * k)</code>, you can use the rules to replace what's in the parentheses and you'll get <code>(k) * k = -1</code> or <code>i * (i) = -1</code>, respectively. Yay associativity!
 
-With this info, we can represent a quaternion in the form:
-
-$$ x\mathbb{i} + y\mathbb{j} + z\mathbb{k} + w $$
-
-It's worth pointing out that the *real axis* where <code>w</code> occupies has a unit value of <code>1</code>. It's just omitted in the formula for convenience: $ ... + w*1 $. This will be useful info later when we're [multiplying quaternions](#qq-multiplication).
-
 ### The Real Part: w
 
 Since <code>w</code> is a value between -1 and +1, how can we map that from/to an angle of rotation?
@@ -275,7 +278,7 @@ When <code>w</code> is 1, <code>x</code>,<code>y</code>, and <code>z</code> will
 
 Although a <code>w</code> value of 0 may seem insignificant, it actually corresponds to the most extreme rotation: 180°.
 
-What about when <code>w</code> is -1? The other values will be 0 just as before because normalization. This angle is 360°. Is this the same as <code>Quaternion.identity</code>? **No.** When applied to a 3D model, it will *look* the exact same, but remember: [A "Complete" Rotation is 720°, Not Just 360°](#a-complete-rotation-is-720-not-just-360). If you applied this *twice*, then it will be equal to the Identity.
+What about when <code>w</code> is -1? The other values will be 0 just as before because normalization. This angle is 360°. Is this the same as <code>Quaternion.identity</code>? **No.** When applied to a 3D model, it will *look* the exact same, the <code>Angle</code> difference between this and Identity will be 0°, but an equality check will return false. Remember: [A "Complete" Rotation is 720°, Not Just 360°](#a-complete-rotation-is-720-not-just-360). If you applied this *twice*, then it will be equal to the Identity. In a way, you could consider this to be the <a href="https://en.wikipedia.org/wiki/Root_of_unity">2<sup>nd</sup> root</a> of the Identity.
 
 ### From Axis & Angle to Quaternion
 
@@ -283,8 +286,8 @@ This is to demonstrate how to do <code>var q = Quaternion.AngleAxis(angle, axis)
 
 ```csharp
 // 1. First define your axis and your angle
-Vector3 axis = new(4f, 20f, 69f);
-float angle = 100f;
+var axis = new Vector3(4f, 20f, 69f);
+var angle = 100f;
 
 // 2. Get the w from the angle. Remember to convert to radians
 var w = Mathf.Cos(angle * Mathf.Deg2Rad / 2f);
@@ -329,7 +332,7 @@ Since we know the form of a quaternion, and we're only plugging in the values fo
 For <code>Q<sub>A</sub> * Q<sub>B</sub></code>, <code>Q<sub>A</sub></code> would be along the left column, and <code>Q<sub>B</sub></code> would be along the top row. If you swap them, you'll just have some minus signs in the wrong spots.
 
 <details><summary>See an example</summary>
-- Not implemented yet -
+- Not implemented yet. If an example would help, tell me to do this -
 </details>
 
 ### Q*V Multiplication
@@ -350,6 +353,8 @@ And that's it. Easy, right?
 
 ## Bonus Material and Resources
 
+### FAQ
+
 <details><summary>I want to interpolate between a start and end orientation, but with the <b>long</b> path. How can I achieve this?</summary>
 As with anything program-related, there are lots of potential solutions. Here is one approach using <code>SlerpUnclamped</code>:
 <pre><code>public Quaternion SlerpLongPath(Quaternion from, Quaternion to, float t)
@@ -360,8 +365,8 @@ As with anything program-related, there are lots of potential solutions. Here is
     return Quaternion.SlerpUnclamped(from, to, adjustedT);
 }
 </code></pre>
-<details><summary>Pop quiz: In what situation will the above code not give desired results?</summary>
-Answer: When the Angle between <code>from</code> and <code>to</code> is less than ~36°. See <a href="#quaternion-interpolation">Quaternion Interpolation</a> for details</details><br>
+<details><summary>Pop Quiz: In what situation will the above code <b>not</b> give desired results?</summary>
+Answer: When the Angle between <code>from</code> and <code>to</code> is less than ~36°. See <a href="#quaternion-interpolation">Quaternion Interpolation</a> for details</details>
 If that's going to be a problem, here is a different approach that uses a mid-point that we flip around:
 <pre><code>public Quaternion SlerpLongPath(Quaternion from, Quaternion to, float t)
 {
@@ -375,12 +380,20 @@ If that's going to be a problem, here is a different approach that uses a mid-po
 With this approach, if <code>from</code> and <code>to</code> are identical or exactly 180° apart, the long path is not strongly defined so results may vary
 </details>
 
-What are some FAQs you'd like me to this list? Ask 
+### Videos
 
-- <a href="https://docs.unity3d.com/Manual/QuaternionAndEulerRotationsInUnity.html"><i>Rotation and orientation in Unity</i></a> - Unity Docs. Short 'n sweet
-- <a href="https://en.wikipedia.org/wiki/Quaternion"><i>Quaternion</i></a> - Wikipedia
-- <a href="https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles"><i>Conversion between quaternions and Euler angles</i></a> - Wikipedia. Did not cover this. Heavy math
+- <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><i>The Quaternion Video You've All Been Waiting For</i></a> (3:32) - Tarodev
 - <a href="https://www.youtube.com/watch?v=d4EgbgTm0Bg"><i>Visualizing quaternions</i></a> (31:50) - 3Blue1Brown, part 1
 - <a href="https://www.youtube.com/watch?v=zjMuIxRvygQ"><i>Quaternions and 3d rotation</i></a> (5:58) - 3Blue1Brown, part 2
 - <a href="https://www.youtube.com/watch?v=jTgdKoQv738"><i>How quaternions produce 3D rotation</i></a> (11:34) - PenguinMaths
-- <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">The Quaternion Video You've All Been Waiting For</a> - Tarodev
+
+### Reading
+
+- <a href="https://penguinmaths.blogspot.com/2019/06/how-quaternions-produce-3d-rotation.html"><i>How Quaternions Produce 3D Rotations</i></a> - PenguinMaths
+- <a href="https://docs.unity3d.com/Manual/QuaternionAndEulerRotationsInUnity.html"><i>Rotation and orientation in Unity</i></a> - Unity Docs. Short 'n sweet
+- <a href="https://en.wikipedia.org/wiki/Quaternion"><i>Quaternion</i></a> - Wikipedia
+
+### Further Reading
+
+- <a href="https://marctenbosch.com/quaternions/"><i>Let's remove Quaternions from every 3D Engine</i></a> - Marc ten Bosch. Interesting read. Suggests Rotors
+- <a href="https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles"><i>Conversion between quaternions and Euler angles</i></a> - Wikipedia. Did not cover this. Heavy math
