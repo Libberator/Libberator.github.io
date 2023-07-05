@@ -18,9 +18,9 @@ So you want to learn about quaternions? Well, you've come to the right place. I'
 
 I've split this article into four main parts:
 1. **[Intuition](#intuition)**. How to think about them
-2. **[Properties of Quaternions]**
-3. **[Unity Methods]** and alternative rotational options
-4. Deeper dive into the **[Math]** behind them
+2. **[Properties of Quaternions](#properties-of-quaternions)**
+3. **[Unity Methods](#unity-methods)** and alternative rotational options
+4. Deeper dive into the **[Math](#math)** behind them
 
 ### Terminology
 
