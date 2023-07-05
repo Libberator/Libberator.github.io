@@ -70,13 +70,13 @@ Why think in terms of axis and angles? Because that's more in line with how quat
 It's a combination of 3 numbers representing the amount of angles rotated about each axes (X, Y, and Z), with a total range of 360° each. This is what you're used to using and seeing and what's displayed in Unity's Inspector for a Transform's "Rotation".
 </details>
 
-1. You can't always trust the numbers you see in the Inspector
+<li style="list-style-type: none;">&ensp;<b>1. You can't always trust the numbers you see in the Inspector</b></li>
 
 Those numbers next to "Rotation" aren't even its <code>transform.rotation</code>, but rather the Transform's **local orientation** (i.e. relative to its parent). The Inspector lies to you, so don't be fooled.
 
 Despite displaying as Euler angles, they're actually a Quaternion behind the scenes. If you rotate around multiple axes, like for some 3D games, don't use its Euler angles as a reference to base your logic off of. This is because the internal conversion that Unity does between Quaternions and Euler angles can have some of the angles "jumping around", giving you **unpredictable** and **unreliable** behavior.
 
-2. Euler Angles are subject to Gimbal Lock
+<li style="list-style-type: none;">&ensp;<b>2. Euler Angles are subject to Gimbal Lock</b></li>
 
 "What even is that?" you might be thinking. Let me Google that for you: "Gimbal Lock happens when two of the rotational axes align, causing a loss of one degree of freedom." Okay, that wasn't very helpful.
 
@@ -102,13 +102,13 @@ public class GimbalLockExample : MonoBehaviour
 ```
 Pitch upwards by pressing W about 90° so that the forward vector aligns with the global Y-axis. Then any adjustment to Yaw (A/D) or Roll (Q/E) will be indistinguishable from one another; they both behave like Roll. That's a loss of a degree of freedom. That's gimbal lock.
 
-3. Interpolation sucks
+<li style="list-style-type: none;">&ensp;<b>3. Interpolation sucks</b></li>
 
 At the end of the [Axis and Angles] section, I pointed out that quaternions will interpolate along the shortest path. If you interpolate with Euler angles, well... it's not a straight path. It will be more like a soft "S". Or it will just glitch out the rotation entirely, because Lerping one axis from 359° to 0° *doesn't* move just 1° like you'd hope it would.\*
 
 *\*This example assumes you're manually handling the Lerping of Euler angles, and not using built-in Quaternion methods.*
 
-4. Dealing with the wrap-around point sucks
+<li style="list-style-type: none;">&ensp;<b>4. Dealing with the wrap-around point sucks</b></li>
 
 Having to add extra code to handle the transition between 0° and 360° (or -180° and 180°) to complete the circle is tedious. This is a situational game-dependent opinion, and sometimes unavoidable, but it's still a pain. Clamping how far up and down you can look in an FPS is fine. But managing Eulers for handling Yaw in a Top-Down/3rd Person game feels wrong to me.
 
@@ -187,7 +187,7 @@ When interpolating between a start and end orientation, Quaternions take the sho
 - <a href="https://docs.unity3d.com/ScriptReference/Quaternion.LerpUnclamped.html">LerpUnclamped</a> & <a href="https://docs.unity3d.com/ScriptReference/Quaternion.SlerpUnclamped.html">SlerpUnclamped</a>: can also extrapolate beyond 0 and 1
 
 <details><summary>What's the difference between Lerp and Slerp? Aren't they both spherical since it involves things that rotate?</summary>
-Yeah, not much difference tbh. Unlike the differences between Vector3's Lerp and Slerp, these all follow the same path but just have an ever-so-slightly different easing/timing along the path. The docs say that "[Lerp] is faster than Slerp but looks worse if the rotations are far apart." But it's hard to see a difference</details><br>
+Yeah, not much difference tbh. Unlike the differences between Vector3's Lerp and Slerp, these all follow the same path but just have an ever-so-slightly different easing/timing along the path. The docs say that "[Lerp] is faster than Slerp but looks worse if the rotations are far apart." But it's hard to see a difference</details>
 
 <details><summary>Do LerpUnclamped and SlerpUnclamped behave the same?</summary>
 <b>No</b>. Because of how the math works with extrapolating and quaternions getting auto-normalized, LerpUnclamped "fizzles out" at certain values outside the 0-1 range, like diminishing returns. Unsatisfying.<br>In my tests, if the angle between the start and end orientations are less than ~36° apart, then SlerpUnclamped <i>also</i> behaves like LerpUnclamped. However, at larger starting angles, SlerpUnclamped shines and will properly extrapolate.<br>For example, if you wanted to extrapolate the Minute Hand on a Clock, your start and end orientations should be at least 6 minutes apart, but less than 30 minutes so that <i>forward</i> in time doesn't go the wrong way
