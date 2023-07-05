@@ -266,7 +266,7 @@ With this info, we can represent a quaternion in the form:
 
 $$ x\mathbb{i} + y\mathbb{j} + z\mathbb{k} + w $$
 
-It's worth pointing out that the *real axis* where `w` lives has a unit value of `1`. It's just omitted in the formula for convenience: $ ... + w*1 $. This will be useful info later when we're [multiplying quaternions](#q-q-multiplication).
+It's worth pointing out that the *real axis* where `w` lives has a unit value of `1`. It's just omitted in the formula for convenience: $ ... + w*1 $. This will be useful info later when we're multiplying quaternions.
 
 ### The Real Part: `w`
 
