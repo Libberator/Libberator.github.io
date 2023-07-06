@@ -11,7 +11,7 @@ img_path: /imgs/
 > <center>A guide appears in front of you. Roll 1d4 for perception.</center>
 
 A member of a Discord server I moderate was curious about how to roll a tetrahedron. And that intrigued me. It's such a unique problem.
-They wanted something similar to <a href="https://www.youtube.com/watch?v=V9rVZ9mf0uA">Tarodev's "Roll-A-Cube" video</a>.
+They wanted something similar to <a href="https://www.youtube.com/watch?v=V9rVZ9mf0uA" target="_blank">Tarodev's "Roll-A-Cube" video</a>.
 
 Searching for a pre-existing solution to see if this had been done before turned up nothing.
 So I got to work.
@@ -48,13 +48,13 @@ All 4 vertices are `1` unit away from each other and `sqrt(3/8)` units away from
 ```
 
 If you want to try deriving it for yourself, I also recommend a linear algebra approach by setting up a few system of equations to solve for the unknowns.
-Alternatively, you can check out the <a href="https://en.wikipedia.org/wiki/Tetrahedron#Coordinates_for_a_regular_tetrahedron">Tetrahedron Wikipedia page</a> for examples, and apply your desired scaling and offset.
+Alternatively, you can check out the <a href="https://en.wikipedia.org/wiki/Tetrahedron#Coordinates_for_a_regular_tetrahedron" target="_blank">Tetrahedron Wikipedia page</a> for examples, and apply your desired scaling and offset.
 
 With these 4 vertices, we can now create our mesh. How you choose to do this is up to you:
 - **3D Modeling Software** (i.e. Blender) - Benefits are: easier customizations like smoothing edges, UV/Texture maps, etc.
 - **ProBuilder in Unity** - New Shape > Cone > Radius = 0.5773503, Height = 0.8164966, Sides = 3.
 *Note: This didn't feel as accurate and will require modified code to work with later because it’s not a regular `Mesh` but a `ProBuilderMesh`.*
-- **Generate Mesh via code** - <a href="https://gist.github.com/Libberator/26c9176e4e51d7a52481ab90175d265d#file-tetrahedronmeshcreator-cs">I've created a script</a> to generate it for you in one click. 
+- **Generate Mesh via code** - <a href="https://gist.github.com/Libberator/26c9176e4e51d7a52481ab90175d265d#file-tetrahedronmeshcreator-cs" target="_blank">I've created a script</a> to generate it for you in one click. 
 I purposefully offset the mesh vertices down so that the center is at the origin. This makes it easier for rotating.
 
 Once you have the mesh generated, it's time to set up the GameObject structure.
@@ -64,7 +64,7 @@ Set it up with the mesh as a child object, then gave the child's local position 
 
 ## RotateAround Approach
 
-<a href="https://docs.unity3d.com/ScriptReference/Transform.RotateAround.html">Transform.RotateAround</a> requires 3 pieces of information:
+<a href="https://docs.unity3d.com/ScriptReference/Transform.RotateAround.html" target="_blank">Transform.RotateAround</a> requires 3 pieces of information:
 - A `Vector3` **axis** to rotate around
 - A `Vector3` **point**, or an anchor, for which the axis passes through
 - A `float` **angle** of rotation in degrees
@@ -94,7 +94,7 @@ var anchor = closestVertices[0].position;
 ```
 
 Finally, we'll need the **angle** of rotation. For a cube, it's an easy 90°. But for a tetrahedron, it's a bit harder to calculate.
-Spoiler alert: it's `109.4712206..°`, or `acos(-1/3)`. According to the <a href="https://en.wikipedia.org/wiki/Tetrahedron#Angles_and_distances">wiki page</a>, this is the same as the "Vertex-Center-Vertex" angle.
+Spoiler alert: it's `109.4712206..°`, or `acos(-1/3)`. According to the <a href="https://en.wikipedia.org/wiki/Tetrahedron#Angles_and_distances" target="_blank">wiki page</a>, this is the same as the "Vertex-Center-Vertex" angle.
 However, I initially solved it for the angle between two faces, also known as the "dihedral angle", then subtracted that from 180°.
 
 ### RotateAround Results
@@ -102,7 +102,7 @@ However, I initially solved it for the angle between two faces, also known as th
 ![RotateAround Results](2023-02-01-rotateAround.gif)
 
 So this will work. If performance is a concern, replace Linq with something that doesn't generate garbage.
-If you're happy with those results, you can stop reading here, <a href="https://gist.github.com/Libberator/26c9176e4e51d7a52481ab90175d265d#file-tetrahedronmoverrotatearound-cs">grab the complete script</a>, and enjoy the rest of your day. :confetti_ball:
+If you're happy with those results, you can stop reading here, <a href="https://gist.github.com/Libberator/26c9176e4e51d7a52481ab90175d265d#file-tetrahedronmoverrotatearound-cs" target="_blank">grab the complete script</a>, and enjoy the rest of your day. :confetti_ball:
 
 But it *does* have some limitations to be aware of:
 1. Over a long distance, after many rolls, some error will accumulate and the orientation won't be perfectly flush.
@@ -147,7 +147,7 @@ I'm choosing this simpler option.
 <b>Answer</b>: It’s <b>outward</b> still. The normal for the face hasn't changed.
 </details>
 
-If you're unfamiliar with <a href="https://docs.unity3d.com/ScriptReference/Quaternion.html">Quaternions</a>, <s>I may cover them more in-depth in a future post</s> Edit: I covered them - <a href="https://libberator.github.io/posts/quaternions">check it out here</a>!
+If you're unfamiliar with <a href="https://docs.unity3d.com/ScriptReference/Quaternion.html" target="_blank">Quaternions</a>, <s>I may cover them more in-depth in a future post</s> Edit: I covered them - <a href="https://libberator.github.io/posts/quaternions" target="_blank">check it out here</a>!
 For now just know they represent rotations and/or orientations.
 They can interpolate more accurately than using Euler angles, always taking the shortest path, and aren't subject to gimbal lock.
 
@@ -185,7 +185,7 @@ var targetPos = transform.position + ONE_OVER_ROOT_THREE * moveDir;
 
 It's worth mentioning that there is *still* a chance for some positional error accumulation.
 If you have a very large map where the position needs to be accurate to a grid, you'll want to grab the coordinates from the grid cell instead.
-You can set up your own coordinate system or just raycast the ground triangle and cleverly use <a href="https://docs.unity3d.com/ScriptReference/RaycastHit-barycentricCoordinate.html">`hit.barycentricCoordinate`</a>.
+You can set up your own coordinate system or just raycast the ground triangle and cleverly use <a href="https://docs.unity3d.com/ScriptReference/RaycastHit-barycentricCoordinate.html" target="_blank">`hit.barycentricCoordinate`</a>.
 But this will work for our purposes without over-engineering.
 
 ## Interpolating/Tweening
@@ -250,7 +250,7 @@ var targetRot = deltaRot * startRot;
 _center.rotation = Quaternion.Slerp(startRot, targetRot, t);
 ```
 
-If you've never used <a href="https://docs.unity3d.com/ScriptReference/Vector3.Slerp.html">`Vector3.Slerp`</a> before, think of it like a windshield wiper. It just gets rotated from pointing in one direction to pointing in another.
+If you've never used <a href="https://docs.unity3d.com/ScriptReference/Vector3.Slerp.html" target="_blank">`Vector3.Slerp`</a> before, think of it like a windshield wiper. It just gets rotated from pointing in one direction to pointing in another.
 With that in mind, we need to mainly work with **offsets**, which we then add onto a world position reference point - an anchor.
 
 ![Slerp Diagram](2023-02-01-slerpDiagram.png)
@@ -274,7 +274,7 @@ transform.position = anchor + Vector3.Slerp(startOffset, targetOffset, t);
 ```
 
 And that's it! With this approach, it's very easy to add an AnimationCurve for a custom easing function and it doesn't rely on a third-party asset.
-You can grab the <a href="https://gist.github.com/Libberator/26c9176e4e51d7a52481ab90175d265d#file-tetrahedronmover-cs">complete script here</a>.
+You can grab the <a href="https://gist.github.com/Libberator/26c9176e4e51d7a52481ab90175d265d#file-tetrahedronmover-cs" target="_blank">complete script here</a>.
 
 ![Slerp Coroutine Results](2023-02-01-slerp.gif)
 

@@ -166,20 +166,20 @@ This is how it works in real life, too: Electrons and other matter particles in 
 
 ### Quaternion Creation
 
-- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.Euler.html">Euler</a>: Rotation that rotates <code>z°</code> around the <code>z</code> axis, <code>x°</code> around the <code>x</code> axis, and <code>y°</code> around the <code>y</code> axis. **In that order**
+- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.Euler.html" target="_blank">Euler</a>: Rotation that rotates <code>z°</code> around the <code>z</code> axis, <code>x°</code> around the <code>x</code> axis, and <code>y°</code> around the <code>y</code> axis. **In that order**
     - Can access these values with <code>transform.eulerAngles</code> - not to be confused with <code>transform.rotation</code>
     - If you're typically setting two of the three values to <code>0°</code>, you can accomplish the same thing with AngleAxis instead
-- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.AngleAxis.html">AngleAxis</a>: Are you thinking in terms of axis and angles yet?
+- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.AngleAxis.html" target="_blank">AngleAxis</a>: Are you thinking in terms of axis and angles yet?
     - You can create most of the same quaternions you'd probably make with Euler with this instead
     - This method is ***FASTER***, too! With a basic test of 100,000 calls every frame, AngleAxis outperformed Euler with 30-50% more FPS. Ditch using Euler; it's a more expensive conversion
-- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.LookRotation.html">LookRotation</a>: Get an orientation by providing a <code>Vector3 forward</code> and a <code>Vector3 upwards</code> as a "hint" to determine Roll. Default hint is <code>Vector3.up</code>
+- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.LookRotation.html" target="_blank">LookRotation</a>: Get an orientation by providing a <code>Vector3 forward</code> and a <code>Vector3 upwards</code> as a "hint" to determine Roll. Default hint is <code>Vector3.up</code>
     - Usually you'll get a forward direction by doing <code>target.position - transform.position</code>
     - Don't have these two vectors align. If you're looking straight up or down, provide a different upwards hint
     - <details><summary>Example Analogy</summary>Imagine you are an astronaut in space and were told to fixate your eyes in a certain direction. Let's assume you could accomplish that part. Great. But there wasn't a strict instruction on how to orient the rest of your body, so you're spinning around 360° while your eyes stay focused. But with an "upwards" reference direction, that's enough to narrow down your possible orientations to just 1 and stop your spinning. Your personal "up" might not be exactly parallel with the "upwards" hint, but it's enough info to tether you to something for some stability</details>
-- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.FromToRotation.html">FromToRotation</a>: This gets the difference in orientation between two direction vectors; the *rotation* that you would need to apply to <code>fromDirection</code> which will result in the <code>toDirection</code>.
+- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.FromToRotation.html" target="_blank">FromToRotation</a>: This gets the difference in orientation between two direction vectors; the *rotation* that you would need to apply to <code>fromDirection</code> which will result in the <code>toDirection</code>.
     - In other words, this solves for <code>Q<sub>FromTo</sub></code> in the equation <code>Q<sub>FromTo</sub> * V<sub>From</sub> = V<sub>To</sub></code>
     - This method was vital for my Roll-a-Tetrahedron solution
-- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.Inverse.html">Inverse</a>: Gets the ~~evil twin~~ opposite rotation of a quaternion.
+- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.Inverse.html" target="_blank">Inverse</a>: Gets the ~~evil twin~~ opposite rotation of a quaternion.
     - Example: if you wanted to get <code>Q<sub>ToFrom</sub></code>, you *could* call FromToRotation again swapping parameters or you could just do <code>Q<sub>ToFrom</sub> = Quaternion.Inverse(Q<sub>FromTo</sub>);</code>
 
 ### Quaternion Interpolation
@@ -187,9 +187,9 @@ This is how it works in real life, too: Electrons and other matter particles in 
 When interpolating between a start and end orientation, Quaternions take the shortest path (this means that angles more than 180° apart aren't a thing). Try to avoid having your start and end 180° apart (pointing in opposite directions), otherwise the path between them will not be well-defined.
 
 #### Time- or Percent-Based Methods
-- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.Lerp.html">Lerp</a>: Linear interpolation between [0-1]
-- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.Slerp.html">Slerp</a>: Spherical interpolation between [0-1]
-- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.LerpUnclamped.html">LerpUnclamped</a> & <a href="https://docs.unity3d.com/ScriptReference/Quaternion.SlerpUnclamped.html">SlerpUnclamped</a>: can also extrapolate beyond 0 and 1
+- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.Lerp.html" target="_blank">Lerp</a>: Linear interpolation between [0-1]
+- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.Slerp.html" target="_blank">Slerp</a>: Spherical interpolation between [0-1]
+- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.LerpUnclamped.html" target="_blank">LerpUnclamped</a> & <a href="https://docs.unity3d.com/ScriptReference/Quaternion.SlerpUnclamped.html" target="_blank">SlerpUnclamped</a>: can also extrapolate beyond 0 and 1
 
 <details><summary>What's the difference between Lerp and Slerp? Aren't they both spherical since it involves things that rotate?</summary>
 Yeah, not much difference tbh. Unlike the differences between Vector3's Lerp and Slerp, these all follow the same path but just have an ever-so-slightly different easing/timing along the path. The docs say that "[Lerp] is faster than Slerp but looks worse if the rotations are far apart." But it's hard to see a difference</details>
@@ -199,34 +199,34 @@ Yeah, not much difference tbh. Unlike the differences between Vector3's Lerp and
 </details>
 
 #### Speed-Based Method
-- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.RotateTowards.html">RotateTowards</a>: Get an orientation that is the <code>from</code> quaternion rotated by a <code>float maxDegreesDelta</code> angle towards the <code>to</code> quaternion without overshooting
+- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.RotateTowards.html" target="_blank">RotateTowards</a>: Get an orientation that is the <code>from</code> quaternion rotated by a <code>float maxDegreesDelta</code> angle towards the <code>to</code> quaternion without overshooting
     - If you use a <code>float rotationSpeed</code> multiplied by <code>Time.deltaTime</code>, it will rotate at that **rate** in degrees per second, no matter the difference between <code>from</code> and <code>to</code>
 
 ### Transform Options for Rotating
 
 Quaternions by theirself are just a math construct - they have no idea what a Transform is. With the Transform class, you have access to more contextual utility, like methods that know the difference between global and local.
 
-- <a href="https://docs.unity3d.com/ScriptReference/Transform.Rotate.html">Transform.Rotate</a>: This method has many overlaod options
+- <a href="https://docs.unity3d.com/ScriptReference/Transform.Rotate.html" target="_blank">Transform.Rotate</a>: This method has many overlaod options
     - Primarily relies on Euler Angles or an Axis and Angle combo
     - Can specify whether it's a global (<code>Space.World</code>) or local (<code>Space.Self</code>) rotation (default)
-- <a href="https://docs.unity3d.com/ScriptReference/Transform.RotateAround.html">Transform.RotateAround</a>: Like a satellite orbiting around a planet or like a hinge joint, this method **also affects the position**
+- <a href="https://docs.unity3d.com/ScriptReference/Transform.RotateAround.html" target="_blank">Transform.RotateAround</a>: Like a satellite orbiting around a planet or like a hinge joint, this method **also affects the position**
     - Uses an Axis and Angle and a world position <code>Vector3 point</code> as a pivot or anchor that the axis passes through
-- <a href="https://docs.unity3d.com/ScriptReference/Transform.LookAt.html">Transform.LookAt</a>: Immediately snap a transform's forward to a <code>Transform target</code> or <code>Vector3 worldPosition</code>
+- <a href="https://docs.unity3d.com/ScriptReference/Transform.LookAt.html" target="_blank">Transform.LookAt</a>: Immediately snap a transform's forward to a <code>Transform target</code> or <code>Vector3 worldPosition</code>
     - Similar to <code>Quaternion.LookRotation</code>, this also can take a <code>Vector3 worldUp</code> hint
     - For 2D games, since this defaults to using the transform's forward, you'll either want to adjust the <code>worldUp</code> to have it orient towards a target (leaving the <code>target</code> vector directly forward of your character) OR change how your sprite is parented/oriented
-- Setting a <code>Vector3 direction</code> directly to <code>transform.<a href="https://docs.unity3d.com/ScriptReference/Transform-forward.html">forward</a>/<a href="https://docs.unity3d.com/ScriptReference/Transform-up.html">up</a>/<a href="https://docs.unity3d.com/ScriptReference/Transform-right.html">right</a></code>
+- Setting a <code>Vector3 direction</code> directly to <code>transform.<a href="https://docs.unity3d.com/ScriptReference/Transform-forward.html" target="_blank">forward</a>/<a href="https://docs.unity3d.com/ScriptReference/Transform-up.html" target="_blank">up</a>/<a href="https://docs.unity3d.com/ScriptReference/Transform-right.html" target="_blank">right</a></code>
     - This approach doesn't give control over where the other axes choose to align, so use cautiously or only in very simple cases
-- Setting a <code>Quaternion rotation</code> directly to <a href="https://docs.unity3d.com/ScriptReference/Transform-rotation.html"><code>transform.rotation</code></a> or <a href="https://docs.unity3d.com/ScriptReference/Transform-localRotation.html"><code>transform.localRotation</code></a>
+- Setting a <code>Quaternion rotation</code> directly to <a href="https://docs.unity3d.com/ScriptReference/Transform-rotation.html" target="_blank"><code>transform.rotation</code></a> or <a href="https://docs.unity3d.com/ScriptReference/Transform-localRotation.html" target="_blank"><code>transform.localRotation</code></a>
     - Tip: If you have <code>someRotation</code> you want to *apply* to your transform's orientation, **don't do** <code>transform.rotation *= someRotation;</code>! Instead, do <code>transform.rotation = someRotation * transform.rotation;</code>. Order matters
 
 ### Quaternion Methods You'll Never or Rarely Use
 
-- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.Normalize.html">Normalize</a>: Set the magnitude of a quaternion to 1, keeping its orientation. Unity does this by default in most cases
-- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.Dot.html">Dot</a>: Returns the Dot Product between two quaternions, a value between -1 and +1 as a measure of "alignment". Easier to use Vectors
-- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.Angle.html">Angle</a>: Returns the angle in degrees between two quaternions. Easier to use Vectors
-- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.ToAngleAxis.html">ToAngleAxis</a>: Gets an Angle and Axis from a quaternion. Usually you're using that kind of info to create quaternions, not the other way around
+- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.Normalize.html" target="_blank">Normalize</a>: Set the magnitude of a quaternion to 1, keeping its orientation. Unity does this by default in most cases
+- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.Dot.html" target="_blank">Dot</a>: Returns the Dot Product between two quaternions, a value between -1 and +1 as a measure of "alignment". Easier to use Vectors
+- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.Angle.html" target="_blank">Angle</a>: Returns the angle in degrees between two quaternions. Easier to use Vectors
+- <a href="https://docs.unity3d.com/ScriptReference/Quaternion.ToAngleAxis.html" target="_blank">ToAngleAxis</a>: Gets an Angle and Axis from a quaternion. Usually you're using that kind of info to create quaternions, not the other way around
     - Fun fact: the axis that gets returned from <code>Quaternion.identity</code> is <code>Vector3.right</code>, or (1, 0, 0)
-- The Quaternion <a href="https://docs.unity3d.com/ScriptReference/Quaternion-ctor.html">Constructor</a>, taking in x,y,z, and w: If you're using this, it's either for the purpose of deserialization, optimizations (e.g. swizzling via extension methods), you understand quaternions better than most, or you copied code you found somewhere
+- The Quaternion <a href="https://docs.unity3d.com/ScriptReference/Quaternion-ctor.html" target="_blank">Constructor</a>, taking in x,y,z, and w: If you're using this, it's either for the purpose of deserialization, optimizations (e.g. swizzling via extension methods), you understand quaternions better than most, or you copied code you found somewhere
 
 ## Math
 
@@ -261,7 +261,7 @@ To make sense of how multiplication with these new axes works, we need to add a 
 - <code>i * j = k</code>,&ensp; <code>j * i = -k</code>
 - <code>j * k = i</code>,&ensp; <code>k * j = -i</code>
 - <code>k * i = j</code>,&ensp; <code>i * k = -j</code><br>
-<a href="https://upload.wikimedia.org/wikipedia/commons/0/04/Cayley_Q8_quaternion_multiplication_graph.svg">Click here for an interactive visualization of these rules</a>
+<a href="https://upload.wikimedia.org/wikipedia/commons/0/04/Cayley_Q8_quaternion_multiplication_graph.svg" target="_blank">Click here for an interactive visualization of these rules</a>
 
 Now we can make sense of what Sir Hamilton etched into stone (see quote at top of this article):
 - <code>i<sup>2</sup> = j<sup>2</sup> = k<sup>2</sup> = ijk = -1</code>
@@ -278,7 +278,7 @@ When <code>w</code> is 1, <code>x</code>,<code>y</code>, and <code>z</code> will
 
 Although a <code>w</code> value of 0 may seem insignificant, it actually corresponds to the most extreme rotation: 180°.
 
-What about when <code>w</code> is -1? The other values will be 0 just as before because normalization. This angle is 360°. Is this the same as <code>Quaternion.identity</code>? **No.** When applied to a 3D model, it will *look* the exact same, the <code>Angle</code> difference between this and Identity will be 0°, but an equality check will return false. Remember: [A "Complete" Rotation is 720°, Not Just 360°](#a-complete-rotation-is-720-not-just-360). If you applied this *twice*, then it will be equal to the Identity. In a way, you could consider this to be the <a href="https://en.wikipedia.org/wiki/Root_of_unity">2<sup>nd</sup> root</a> of the Identity.
+What about when <code>w</code> is -1? The other values will be 0 just as before because normalization. This angle is 360°. Is this the same as <code>Quaternion.identity</code>? **No.** When applied to a 3D model, it will *look* the exact same, the <code>Angle</code> difference between this and Identity will be 0°, but an equality check will return false. Remember: [A "Complete" Rotation is 720°, Not Just 360°](#a-complete-rotation-is-720-not-just-360). If you applied this *twice*, then it will be equal to the Identity. In a way, you could consider this to be the <a href="https://en.wikipedia.org/wiki/Root_of_unity" target="_blank">2<sup>nd</sup> root</a> of the Identity.
 
 ### From Axis & Angle to Quaternion
 
@@ -382,18 +382,18 @@ With this approach, if <code>from</code> and <code>to</code> are identical or ex
 
 ### Videos
 
-- <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><i>The Quaternion Video You've All Been Waiting For</i></a> (3:32) - Tarodev
-- <a href="https://www.youtube.com/watch?v=d4EgbgTm0Bg"><i>Visualizing quaternions</i></a> (31:50) - 3Blue1Brown, part 1
-- <a href="https://www.youtube.com/watch?v=zjMuIxRvygQ"><i>Quaternions and 3d rotation</i></a> (5:58) - 3Blue1Brown, part 2
-- <a href="https://www.youtube.com/watch?v=jTgdKoQv738"><i>How quaternions produce 3D rotation</i></a> (11:34) - PenguinMaths
+- <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank"><i>The Quaternion Video You've All Been Waiting For</i></a> (3:32) - Tarodev
+- <a href="https://www.youtube.com/watch?v=d4EgbgTm0Bg" target="_blank"><i>Visualizing quaternions</i></a> (31:50) - 3Blue1Brown, part 1
+- <a href="https://www.youtube.com/watch?v=zjMuIxRvygQ" target="_blank"><i>Quaternions and 3d rotation</i></a> (5:58) - 3Blue1Brown, part 2
+- <a href="https://www.youtube.com/watch?v=jTgdKoQv738" target="_blank"><i>How quaternions produce 3D rotation</i></a> (11:34) - PenguinMaths
 
 ### Reading
 
-- <a href="https://penguinmaths.blogspot.com/2019/06/how-quaternions-produce-3d-rotation.html"><i>How Quaternions Produce 3D Rotations</i></a> - PenguinMaths
-- <a href="https://docs.unity3d.com/Manual/QuaternionAndEulerRotationsInUnity.html"><i>Rotation and orientation in Unity</i></a> - Unity Docs. Short 'n sweet
-- <a href="https://en.wikipedia.org/wiki/Quaternion"><i>Quaternion</i></a> - Wikipedia
+- <a href="https://penguinmaths.blogspot.com/2019/06/how-quaternions-produce-3d-rotation.html" target="_blank"><i>How Quaternions Produce 3D Rotations</i></a> - PenguinMaths
+- <a href="https://docs.unity3d.com/Manual/QuaternionAndEulerRotationsInUnity.html" target="_blank"><i>Rotation and orientation in Unity</i></a> - Unity Docs. Short 'n sweet
+- <a href="https://en.wikipedia.org/wiki/Quaternion" target="_blank"><i>Quaternion</i></a> - Wikipedia
 
 ### Further Reading
 
-- <a href="https://marctenbosch.com/quaternions/"><i>Let's remove Quaternions from every 3D Engine</i></a> - Marc ten Bosch. Interesting read. Suggests Rotors
-- <a href="https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles"><i>Conversion between quaternions and Euler angles</i></a> - Wikipedia. Did not cover this. Heavy math
+- <a href="https://marctenbosch.com/quaternions/" target="_blank"><i>Let's remove Quaternions from every 3D Engine</i></a> - Marc ten Bosch. Interesting read. Suggests Rotors
+- <a href="https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles" target="_blank"><i>Conversion between quaternions and Euler angles</i></a> - Wikipedia. Did not cover this. Heavy math

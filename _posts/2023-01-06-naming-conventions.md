@@ -15,7 +15,7 @@ image: /imgs/code_quality.png
 No, I don't mean that in the "you're in trouble" sense, but more literally: we *need* to be able to communicate more clearly.
 When something is written in text, it can be hard to determine the *\*intent\** behind the words or *where they're coming from*.
 Words and phrases can have many different meanings to different people, often requiring surrounding context to decipher.
-But what if you aren't given enough context or can't infer intent? (see: <a href="https://www.youtube.com/watch?v=sngRrkQayDA">Key & Peele - "When a Text Conversation Goes Very Wrong"</a>)
+But what if you aren't given enough context or can't infer intent? (see: <a href="https://www.youtube.com/watch?v=sngRrkQayDA" target="_blank">Key & Peele - "When a Text Conversation Goes Very Wrong"</a>)
 
 That's where **coding/naming conventions** come in. :heart_eyes: They're like the emojis of modern communication, able to pack a lot of info in such a small space. :100:
 
@@ -47,7 +47,7 @@ At a *minimum*, you should have 3 distinct ways to immediately identify whether 
 - local (method parameter or created inside a method)
 
 Microsoft has a detailed article covering this topic:<br>
-<a href="https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions">https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions</a>
+<a href="https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions" target="_blank">https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions</a>
 
 I follow the majority of them, with some differences.
 Here is a non-exhaustive summary of my preferred coding conventions:
@@ -96,7 +96,7 @@ Is it important to know whether the variable originated in your class or in one 
 
 I use `var` all the time. As much as possible. Most of the time, its type can be easily inferred by what's on the right-hand-side of the assignment operator.
 If there's any chance of confusion for what type something is, the variable name should be descriptive enough to clear it up.
-To be clear, this does **not** mean to ever use <a href="https://en.wikipedia.org/wiki/Hungarian_notation">Hungarian Notation</a>.
+To be clear, this does **not** mean to ever use <a href="https://en.wikipedia.org/wiki/Hungarian_notation" target="_blank">Hungarian Notation</a>.
 
 Similar to how I'm explicit with `private`, I also prefer to be explicit with how I write numbers. While `float num = 42;` is the same as `float num = 42f;` due to implicit conversion, `var num = 42;` is **not** the same as `var num = 42f;` —
 one is an `int`, the other is a `float`. Therefore, it's a good habit to always write the `f` after your number when you're working with floats.
@@ -111,7 +111,7 @@ I don't think there's much to *gain* by purposefully avoiding `var`. It's a feat
 ### Bracket Indentation
 
 There are two leading styles when it comes to where the brackets get placed.<br>
-<a href="https://en.wikipedia.org/wiki/Indentation_style#Allman_style">Allman</a>:
+<a href="https://en.wikipedia.org/wiki/Indentation_style#Allman_style" target="_blank">Allman</a>:
 ```csharp
 public void BracketOnNewLine()
 {
@@ -121,7 +121,7 @@ public void BracketOnNewLine()
     }
 }
 ```
-<a href="https://en.wikipedia.org/wiki/Indentation_style#K&R_style">K&R</a>:
+<a href="https://en.wikipedia.org/wiki/Indentation_style#K&R_style" target="_blank">K&R</a>:
 ```csharp
 public void BracketOnSameLine() {
     while (true) {
