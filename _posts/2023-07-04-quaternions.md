@@ -342,7 +342,7 @@ Using a matrix table to perform Q<sub>A</sub> * Q<sub>B</sub> is easier for more
   <tr><td>0 k</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
   <tr><td>0.5</td><td>0</td><td>0.1294 j</td><td>0</td><td>0.48296</td></tr></table></div>Combinining like terms gives us:
 Q<sub>B</sub>' = 0i - 0.7071j + 0k + 0.7071</code></pre>
-Converting that <a href="#from-quaternion-to-axis--angle">quaterion to an Angle and Axis</a> tells us it's a 90° rotation about the negative Y-axis. Using the left-hand-rule, this orientation represents looking directly left. We did it! That wasn't too bad.
+Converting that <a href="#from-quaternion-to-axis--angle">quaternion to an Angle and Axis</a> tells us it's a 90° rotation about the negative Y-axis. Using the left-hand-rule, this orientation represents looking directly left. We did it! That wasn't too bad.
 </details>
 
 ### Q*V Multiplication
