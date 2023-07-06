@@ -331,8 +331,18 @@ Since we know the form of a quaternion, and we're only plugging in the values fo
 
 For <code>Q<sub>A</sub> * Q<sub>B</sub></code>, <code>Q<sub>A</sub></code> would be along the left column, and <code>Q<sub>B</sub></code> would be along the top row. If you swap them, you'll just have some minus signs in the wrong spots.
 
-<details><summary>See an example</summary>
-- Not implemented yet. If an example would help, tell me to do this -
+<details><summary>See a step-by-step example</summary>
+In this example, imagine we're looking at a computer monitor slightly to our right at 30° and want to turn our neck to look directly to our left by a 120°. Here's what that math looks like
+<pre><code>Q<sub>A</sub> = 0i - 0.866j + 0k + 0.5 // rotation same as Quaternion.AngleAxis(-120f, Vector3.up)
+Q<sub>B</sub> = 0i + 0.2588j + 0k + 0.9659 // orientation same as Quaternion.AngleAxis(30, Vector3.up)
+Using a matrix table to perform Q<sub>A</sub> * Q<sub>B</sub> is easier for more complex multiplications
+<div style="display: flex; justify-content: center;"><table style="text-align: center;"><tr><th></th><th>0 i</th><th>0.2588 j</th><th>0 k</th><th>0.9659</th></tr>
+  <tr><td>0 i</th><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+  <tr><td>-0.866 j</td><td>0</td><td>0.22414</td><td>0</td><td>-0.8365 j</td></tr>
+  <tr><td>0 k</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+  <tr><td>0.5</td><td>0</td><td>0.1294 j</td><td>0</td><td>0.48296</td></tr></table></div>Combinining like terms gives us:
+Q<sub>B</sub>' = 0i - 0.7071j + 0k + 0.7071</code></pre>
+Converting that <a href="#from-quaternion-to-axis--angle">quaterion to an Angle and Axis</a> tells us it's a 90° rotation about the negative Y-axis. Using the left-hand-rule, this orientation represents looking directly left. We did it! That wasn't too bad.
 </details>
 
 ### Q*V Multiplication
@@ -348,6 +358,28 @@ So how do we multiply something that lives in 3D space by something that's 4D? T
 1. We *pretend* our vector is actually 4D like a quaternion, setting the <code>w</code> value to 0. We don't do any normalzing to it. We'll call it <code>V<sub>4D</sub></code>
 2. We do the same quaternion multiplication as before but just **twice**. It doesn't matter which pair you multiply first:  <code>(Q * V<sub>4D</sub>) * Q<sup>-1</sup></code> = <code>Q * (V<sub>4D</sub> * Q<sup>-1</sup>)</code>
 3. After all the multiplication math dust settles, if we did it right, its <code>w</code> will end up as 0 and so we drop that real axis. We also drop the imaginary labels <code>i</code>, <code>j</code>, and <code>k</code> from it to convert it back to a regular Vector, now rotated
+
+<details><summary>See a longer step-by-step example</summary>
+In this example, let's start with a (7, 7, 0) vector and try to rotate that counter-clockwise by 45°. Relatively simple 2D example that you could solve using the <a href="https://en.wikipedia.org/wiki/Rotation_matrix" target="_blank">Rotation Matrix</a>, but let's demonstrate what it looks like with quaternions
+<pre><code>V = 7x + 7y + 0z
+Q = 0i + 0j + 0.38268k + 0.92388 // rotation same as Quaternion.AngleAxis(45f, Vector3.forward)
+Q<sup>-1</sup> = 0i + 0j - 0.38268k + 0.92388 // Inverse to sandwich with
+Let's pretend that V is a quaternion. I'm choosing to perform V<sub>4D</sub> * Q<sup>-1</sup> first
+<div style="display: flex; justify-content: center;"><table style="text-align: center;"><tr><th></th><th>0 i</th><th>0 j</th><th>-0.38268 k</th><th>0.92388</th></tr>
+  <tr><td>7 i</td><td>0</td><td>0</td><td>2.67876 j</td><td>6.46716 i</td></tr>
+  <tr><td>7 j</td><td>0</td><td>0</td><td>-2.67876 i</td><td>6.46716 j</td></tr>
+  <tr><td>0 k</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+  <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr></table></div>Combinining like terms gives us:
+V<sub>4D</sub>' = 3.7884i + 9.14592j + 0k + 0</code></pre>
+Half-way there. Now we multiply Q by V<sub>4D</sub>'
+<pre><code><div style="display: flex; justify-content: center;"><table style="text-align: center;"><tr><th></th><th>3.7884 i</th><th>9.14592 j</th><th>0 k</th><th>0</th></tr>
+  <tr><td>0 i</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+  <tr><td>0 j</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+  <tr><td>0.38268 k</td><td>1.45 j</td><td>-3.5 i</td><td>0</td><td>0</td></tr>
+  <tr><td>0.92388</td><td>3.5 i</td><td>8.45 j</td><td>0</td><td>0</td></tr></table></div>Simplifying one last time gives us:
+  V<sub>4D</sub>' = 0i + 9.9j + 0k + 0</code></pre>
+Converting the final result back into 3D world space gives us a vector of (0, 9.9, 0). Awesome!
+</details>
 
 And that's it. Easy, right?
 
