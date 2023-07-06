@@ -147,8 +147,8 @@ I'm choosing this simpler option.
 <b>Answer</b>: It’s <b>outward</b> still. The normal for the face hasn't changed.
 </details>
 
-If you're unfamiliar with <a href="https://docs.unity3d.com/ScriptReference/Quaternion.html">Quaternions</a>, I may cover them more in-depth in a future post,
-but for now just know they represent rotations and/or orientations.
+If you're unfamiliar with <a href="https://docs.unity3d.com/ScriptReference/Quaternion.html">Quaternions</a>, <s>I may cover them more in-depth in a future post</s> Edit: I covered them - <a href="https://libberator.github.io/posts/quaternions">check it out here</a>!
+For now just know they represent rotations and/or orientations.
 They can interpolate more accurately than using Euler angles, always taking the shortest path, and aren't subject to gimbal lock.
 
 With the goal to rotate so that the hit face ends up on the bottom, we can get the target orientation with the following code:
