@@ -249,7 +249,7 @@ Instead, it's easier to imagine a quaternion in two parts: a Vector3 (using <cod
 
 The magical rotational properties stem from the usage of imaginary numbers: $i = \sqrt{-1}$
 
-Brief refresher on the Complex Plane, $\mathbb{C}$: it's a 2D grid, where the horizontal axis consists of real numbers, $\mathbb{R}$, and the vertical axis consists of imaginary numbers, $\mathbb{I}$. A point in the grid is called a complex number, written as <code>a + bi</code>. Any time you multiply a complex number by <code>i</code>, it's like rotating that point 90° counter-clockwise about the origin. If you do that 4 times, you're back to where you started: <code>1</code> -> <code>i</code> -> <code>-1</code> -> <code>-i</code> -> <code>1</code>
+Brief refresher on the Complex Plane, $\mathbb{C}$: it's a 2D grid, where the horizontal axis consists of real numbers, $\mathbb{R}$, and the vertical axis consists of imaginary numbers, $\mathbb{I}$. A point in the grid is called a complex number, written as <code>a + bi</code>. Any time you multiply a complex number by <code>i</code>, it's like rotating that point 90° counter-clockwise about the origin. If you do that 4 times, you're back to where you started: <code>1</code> → <code>i</code> → <code>-1</code> → <code>-i</code> → <code>1</code>
 
 Let's extend the Complex Plane by adding two more imaginary dimensions: <code>j</code> and <code>k</code>. Both <code>j</code> and <code>k</code> also have the rotational superpowers that come from $\sqrt{-1}$. All four axes (<code>1</code>, <code>i</code>, <code>j</code>, and <code>k</code>) are orthogonal to one another, forming a "basis" in our 4D space. We can represent a quaternion in the form:
 
@@ -336,8 +336,8 @@ For <code>Q<sub>A</sub> * Q<sub>B</sub></code>, <code>Q<sub>A</sub></code> would
 <b>Step-by-Step Example</b>
 
 In this example, imagine we're looking at a computer monitor slightly to our right at 30° and want to turn our neck left by 120°.<br>
-<code>Q<sub>A</sub> = 0i - 0.866j + 0k + 0.5</code> <- rotation same as Quaternion.AngleAxis(-120f, Vector3.up)<br>
-<code>Q<sub>B</sub> = 0i + 0.2588j + 0k + 0.9659</code> <- orientation same as Quaternion.AngleAxis(30, Vector3.up)<br>
+<code>Q<sub>A</sub> = 0i - 0.866j + 0k + 0.5</code> ← rotation same as <code>Quaternion.AngleAxis(-120f, Vector3.up)</code><br>
+<code>Q<sub>B</sub> = 0i + 0.2588j + 0k + 0.9659</code> ← orientation same as <code>Quaternion.AngleAxis(30, Vector3.up)</code><br>
 Use a matrix table to perform <code>Q<sub>A</sub> * Q<sub>B</sub></code>
 
 |     | `0 i` | `0.2588 j` | `0 k` | `0.9659` |
@@ -369,8 +369,8 @@ So how do we multiply something that lives in 3D space by something that's 4D? T
 
 In this example, let's start with a <code>(7, 7, 0)</code> vector and try to rotate that counter-clockwise by 45°. Relatively simple 2D example that you could solve using the <a href="https://en.wikipedia.org/wiki/Rotation_matrix" target="_blank">Rotation Matrix</a>, but let's demonstrate what it looks like with quaternions<br>
 <code>V = 7x + 7y + 0z</code><br>
-<code>Q = 0i + 0j + 0.38268k + 0.92388</code> <- rotation same as Quaternion.AngleAxis(45f, Vector3.forward)<br>
-<code>Q<sup>-1</sup> = 0i + 0j - 0.38268k + 0.92388</code> <- Inverse to sandwich with<br>
+<code>Q = 0i + 0j + 0.38268k + 0.92388</code> ← rotation same as <code>Quaternion.AngleAxis(45f, Vector3.forward)</code><br>
+<code>Q<sup>-1</sup> = 0i + 0j - 0.38268k + 0.92388</code> ← Inverse to sandwich with<br>
 Let's pretend that V is a quaternion. I'm choosing to perform <code>V<sub>4D</sub> * Q<sup>-1</sup></code> first
 
 |     | `0 i` | `0 j` | `-0.38268 k` | `0.92388` |
