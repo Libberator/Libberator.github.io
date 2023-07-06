@@ -335,9 +335,9 @@ For <code>Q<sub>A</sub> * Q<sub>B</sub></code>, <code>Q<sub>A</sub></code> would
 
 <b>Step-by-Step Example</b>
 
-In this example, imagine we're looking at a computer monitor slightly to our right at 30° and want to turn our neck left by 120°.
-<pre></code>Q<sub>A</sub> = 0i - 0.866j + 0k + 0.5 // rotation same as Quaternion.AngleAxis(-120f, Vector3.up)
-Q<sub>B</sub> = 0i + 0.2588j + 0k + 0.9659 // orientation same as Quaternion.AngleAxis(30, Vector3.up)</code></pre>
+In this example, imagine we're looking at a computer monitor slightly to our right at 30° and want to turn our neck left by 120°.<br>
+<code>Q<sub>A</sub> = 0i - 0.866j + 0k + 0.5</code> <- rotation same as Quaternion.AngleAxis(-120f, Vector3.up)<br>
+<code>Q<sub>B</sub> = 0i + 0.2588j + 0k + 0.9659</code> <- orientation same as Quaternion.AngleAxis(30, Vector3.up)<br>
 Use a matrix table to perform <code>Q<sub>A</sub> * Q<sub>B</sub></code>
 
 |     | `0 i` | `0.2588 j` | `0 k` | `0.9659` |
@@ -367,12 +367,11 @@ So how do we multiply something that lives in 3D space by something that's 4D? T
 
 <b>Longer Step-by-Step Example</b>
 
-In this example, let's start with a <code>(7, 7, 0)</code> vector and try to rotate that counter-clockwise by 45°. Relatively simple 2D example that you could solve using the <a href="https://en.wikipedia.org/wiki/Rotation_matrix" target="_blank">Rotation Matrix</a>, but let's demonstrate what it looks like with quaternions
-<pre><code>V = 7x + 7y + 0z
-Q = 0i + 0j + 0.38268k + 0.92388 // rotation same as Quaternion.AngleAxis(45f, Vector3.forward)
-Q<sup>-1</sup> = 0i + 0j - 0.38268k + 0.92388 // Inverse to sandwich with
-Let's pretend that V is a quaternion. I'm choosing to perform V<sub>4D</sub> * Q<sup>-1</sup> first
-</code></pre>
+In this example, let's start with a <code>(7, 7, 0)</code> vector and try to rotate that counter-clockwise by 45°. Relatively simple 2D example that you could solve using the <a href="https://en.wikipedia.org/wiki/Rotation_matrix" target="_blank">Rotation Matrix</a>, but let's demonstrate what it looks like with quaternions<br>
+<code>V = 7x + 7y + 0z</code><br>
+<code>Q = 0i + 0j + 0.38268k + 0.92388</code> <- rotation same as Quaternion.AngleAxis(45f, Vector3.forward)<br>
+<code>Q<sup>-1</sup> = 0i + 0j - 0.38268k + 0.92388</code> <- Inverse to sandwich with<br>
+Let's pretend that V is a quaternion. I'm choosing to perform <code>V<sub>4D</sub> * Q<sup>-1</sup></code> first
 
 |     | `0 i` | `0 j` | `-0.38268 k` | `0.92388` |
 | --- | :-: | :-: | :-: | :-: |
@@ -395,6 +394,10 @@ Half-way there. Now we multiply <code>Q * V<sub>4D</sub>'</code>
 Simplifying one last time gives us <code>V<sub>4D</sub>' = 0i + 9.9j + 0k + 0</code>
 
 Converting the final result back into 3D world space gives us a vector of <code>(0, 9.9, 0)</code>. Awesome!
+
+## Conclusion
+
+Quaternions are pretty nifty :thumbsup:
 
 ## Bonus Material and Resources
 
