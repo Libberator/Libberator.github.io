@@ -58,7 +58,7 @@ Leaning back in your chair? Nah. You're rotating the chair negative degrees abou
 
 Looking down and to your left? Nah. Your neck is oriented some positive degrees around <code>Vector(1, -1, 0)</code>, assuming Z is your forward. Might be tough to wrap your head around.
 
-Grab an pineapple :pineapple:. Grab a pen :pen:. Make a Pineapple Pen :pineapple: :pen:. That pen is the axis, at whatever arbitrary vector you stuck it in at. Spin it to see how it rotates.
+Grab a pineapple. :pineapple: Grab a pen. :pen: Make a Pineapple Pen. :pineapple: :pen: That pen is the axis, at whatever arbitrary vector you stuck it in at. Spin it to see how it rotates.
 
 Why think in terms of axis and angles? Because that's more in line with how quaternions actually rotate. If you have a start and end orientation and want to interpolate between them, the shortest path is achieved with this kind of visualization. It's like drawing two dots on a basketball and connecting it with the shortest line. Look at the path the dot needs to travel, and rotate it with an axis that's perpendicular to that.
 
