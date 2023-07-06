@@ -276,9 +276,11 @@ Answer: $ w = \cos{(\theta / 2)} $, and $ \theta = 2 * \arccos{w} $
 
 When <code>w</code> is 1, <code>x</code>,<code>y</code>, and <code>z</code> will be 0 due to normalization constraints. This is the same as <code>Quaternion.identity</code>, where the angle of rotation is 0°.
 
-Although a <code>w</code> value of 0 may seem insignificant, it actually corresponds to the most extreme rotation: 180°.
+Although a <code>w</code> value of 0 may seem insignificant, it actually represents the most extreme rotation: 180°.
 
-What about when <code>w</code> is -1? The other values will be 0 just as before because normalization. This angle is 360°. Is this the same as <code>Quaternion.identity</code>? **No.** When applied to a 3D model, it will *look* the exact same, the <code>Angle</code> difference between this and Identity will be 0°, but an equality check will return false. Remember: [A "Complete" Rotation is 720°, Not Just 360°](#a-complete-rotation-is-720-not-just-360). If you applied this *twice*, then it will be equal to the Identity. In a way, you could consider this to be the <a href="https://en.wikipedia.org/wiki/Root_of_unity" target="_blank">2<sup>nd</sup> root</a> of the Identity.
+What about when <code>w</code> is -1? The other values will be 0 just as before because normalization, but the angle is 360°.
+<details><summary>Is this last case the same as <code>Quaternion.identity</code>?</summary>
+<b>No.</b> When applied to a 3D model, it will <i>look</i> the exact same, the <code>Angle</code> difference between this and Identity will be 0°, but an equality check will return false. Remember: <a href="#a-complete-rotation-is-720-not-just-360">A "Complete" Rotation is 720°, Not Just 360°</a>. If you applied this <i>twice</i>, then it will be equal to the Identity. In a way, you could consider this to be the <a href="https://en.wikipedia.org/wiki/Root_of_unity" target="_blank">2<sup>nd</sup> root</a> of the Identity.</details>
 
 ### From Axis & Angle to Quaternion
 
@@ -332,7 +334,7 @@ Since we know the form of a quaternion, and we're only plugging in the values fo
 For <code>Q<sub>A</sub> * Q<sub>B</sub></code>, <code>Q<sub>A</sub></code> would be along the left column, and <code>Q<sub>B</sub></code> would be along the top row. If you swap them, you'll just have some minus signs in the wrong spots.
 
 <details><summary>See a step-by-step example</summary>
-In this example, imagine we're looking at a computer monitor slightly to our right at 30° and want to turn our neck to look directly to our left by a 120°. Here's what that math looks like
+In this example, imagine we're looking at a computer monitor slightly to our right at 30° and want to turn our neck left by 120°. Here's what that math looks like
 <pre><code>Q<sub>A</sub> = 0i - 0.866j + 0k + 0.5 // rotation same as Quaternion.AngleAxis(-120f, Vector3.up)
 Q<sub>B</sub> = 0i + 0.2588j + 0k + 0.9659 // orientation same as Quaternion.AngleAxis(30, Vector3.up)
 Using a matrix table to perform Q<sub>A</sub> * Q<sub>B</sub> is easier for more complex multiplications
@@ -349,7 +351,7 @@ Converting that <a href="#from-quaternion-to-axis--angle">quaternion to an Angle
 
 I know I wrote <code>Q * V</code>, but *actually* we have to do <code>Q * V * Q<sup>-1</sup></code>, *sandwiching* the vector between the quaterion and its inverse\*. Yummy. This is to ensure the <code>w</code> value gets properly canceled out so that we're left with a Vector in the end and not actually a quaternion.
 
-\*<i>Note: In Unity, you can't perform <code>V * Q</code>. This math section is how to solve it **on paper**, and it's more-or-less what happens behind the scenes when you do a <code>Q * V</code> operation in Unity.</i>
+\*<i>Note: In Unity, you can't perform <code>V * Q</code> in that order. This math section is how to solve it **on paper**, and it's more-or-less what happens behind the scenes when you do a <code>Q * V</code> operation in Unity.</i>
 
 Not the best analogy, but here's one way to think about it the sandwiching: Imagine wringing out a wet towel. Both hands start facing the same direction as each other, palms down gripping the towel. One hand twists the towel in one direction 180° (<code>Q</code>). The other hand twists it 180° in the opposite direction (<code>Q<sup>-1</sup></code>). Both hands end up still facing the same way as each other, but the towel (<code>V</code>) ends up twisted (rotated) and slightly less soaked.
 
@@ -380,8 +382,6 @@ Half-way there. Now we multiply Q by V<sub>4D</sub>'
   V<sub>4D</sub>' = 0i + 9.9j + 0k + 0</code></pre>
 Converting the final result back into 3D world space gives us a vector of (0, 9.9, 0). Awesome!
 </details>
-
-And that's it. Easy, right?
 
 ## Bonus Material and Resources
 
