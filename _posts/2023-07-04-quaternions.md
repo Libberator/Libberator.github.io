@@ -90,17 +90,22 @@ public class GimbalLockExample : MonoBehaviour
 
     private void Update()
     {
-        _pitch -= Input.GetAxis("Vertical") * _speed * Time.deltaTime; // W/S
-        _yaw += Input.GetAxis("Horizontal") * _speed * Time.deltaTime; // A/D
-        var leftRoll = Input.GetKey(KeyCode.Q) ? 1f : 0f;
-        var rightRoll = Input.GetKey(KeyCode.E) ? -1f : 0f;
-        _roll += (rightRoll + leftRoll) * _speed * Time.deltaTime; // Q/E
+        var pitchInput = Input.GetAxisRaw("Vertical"); // W/S
+        var yawInput = Input.GetAxisRaw("Horizontal"); // A/D
+        var rollInput = (Input.GetKey(KeyCode.Q) ? 1f : 0f) + 
+                        (Input.GetKey(KeyCode.E) ? -1f : 0f); // Q/E
+
+        _pitch += pitchInput * _speed * Time.deltaTime;
+        _yaw += yawInput * _speed * Time.deltaTime;
+        _roll += rollInput * _speed * Time.deltaTime;
 
         transform.rotation = Quaternion.Euler(_pitch, _yaw, _roll);
     }
 }
 ```
-Pitch upwards by pressing W about 90° so that the forward vector aligns with the global Y-axis. Then any adjustment to Yaw (A/D) or Roll (Q/E) will be indistinguishable from one another; they both behave like Roll. That's a loss of a degree of freedom. That's gimbal lock.
+Press 'S' to pitch upwards for about 90° ("inverted controls" are just for this demo; I'm not a monster) so that the local forward vector aligns with the global Y-axis - this is when the red and blue rings align in the gif. Then you'll see that any adjustment to Yaw (A/D) or Roll (Q/E) will be indistinguishable from one another; they both behave like Roll. That's a loss of a degree of freedom (a.k.a. "gimbal lock").
+
+![Gimbal Lock](2023-07-16-gimbal-lock.gif)
 
 &ensp;<b>#3. Interpolation sucks</b>
 
@@ -156,9 +161,9 @@ When multiplying quaternions together, the best way to think about it is from **
 
 ### A "Complete" Rotation is 720°, Not Just 360°
 
-![Quaternion Spin](2023-07-04-quaternion-spin.gif)
+![Quaternion Spin](2023-07-15-quaternion-spin.gif)
 
-By "complete", I'm referring to an orientation returning to its starting state. If you track one face of the cube in the gif, you'll see how this works where there are two different "states" when the face is oriented the same way.
+By "complete", I'm referring to an orientation returning to its starting <i>state</i>. If you track one face of the cube in the gif, you'll see how this works where there are two different "states" when the face is oriented the same way.
 
 This is how it works in real life, too: Electrons and other matter particles in quantum mechanics have this "spin" property, where it can be in a "spin up" or "spin down" state.
 
