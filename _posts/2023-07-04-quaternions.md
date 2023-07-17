@@ -109,7 +109,7 @@ Press 'S' to pitch upwards for about 90° ("inverted controls" are just for this
 
 &ensp;<b>#3. Interpolation sucks</b>
 
-At the end of the [Axis and Angles] section, I pointed out that quaternions will interpolate along the shortest path. If you interpolate with Euler angles, well... it's not a straight path. It will be more like a soft "S". Or it will just glitch out the rotation entirely, because Lerping one axis from 359° to 0° *doesn't* move just 1° like you'd hope it would.\*
+At the end of the **[Axis and Angles](#axis-and-angles)** section, I pointed out that quaternions will interpolate along the shortest path. If you interpolate with Euler angles, well... it's not a straight path. It will be more like a soft "S". Or it will just glitch out the rotation entirely, because Lerping one axis from 359° to 0° *doesn't* move just 1° like you'd hope it would.\*
 
 *\*This example assumes you're manually handling the Lerping of Euler angles, and not using built-in Quaternion methods.*
 
